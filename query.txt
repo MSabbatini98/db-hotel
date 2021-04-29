@@ -1,48 +1,51 @@
 1) Seleziona tutti gli ospiti che sono stati identificati con la carta di identità
 
 SELECT * 
-FROM `guest`
-WHERE identification = CID;
+FROM `ospiti`
+WHERE `document_type`= 'CI';
 
 
 2) Seleziona tutti gli ospiti che sono nati dopo il 1988
 
 SELECT *
-FROM `guest`
-WHERE `dob` > `01-01-1998`
+FROM `ospiti`
+WHERE YEAR(`date_of_birth`) > '1998';
 
 
 3) Seleziona tutti gli ospiti che hanno più di 20 anni (al momento dell’esecuzione della query)
 
 SELECT * 
-FROM `guest`
-WHERE PERIOD_DIFF(NOW(), `dob`);
+FROM `ospiti`
+WHERE `date_of_birth` < DATE_SUB(CURRENT_DATE(), INTERVAL 20 YEARS) ;
 
 
 4) Seleziona tutti gli ospiti il cui nome inizia con la D
 SELECT * 
-FROM `guest`
-WHERE name LIKE `D%`;
+FROM `ospiti`
+WHERE `name` LIKE 'D%';
 
 
 5) Calcola il totale degli ordini accepted
 
-SELECT SUM(price) 
-FROM `guest`
-WHERE status LIKE `accepted`;
+SELECT SUM(price) AS 'totale'
+FROM `pagamenti`
+WHERE `status` = 'accepted';
 
 
 6) Qual è il prezzo massimo pagato?
-SELECT MAX(price)
-FROM `guest`
+
+SELECT MAX(price) AS 'prezzo_massimo'
+FROM `pagamenti`
+WHERE `status` = 'accepted';
 
 7) Seleziona gli ospiti riconosciuti con patente e nati nel 1975
+
 SELECT * 
-FROM `guest`
-WHERE identification = patente 
-AND `yob` = 1975;
+FROM `ospiti`
+WHERE `document_type`= 'Driver_license'
+AND YEAR(`date_of_birth`) = '1975';
 
 8) Quanti posti letto ha l’hotel in totale?
 
-SELECT SUM(beds) AS totale_letti
-FROM `hotels`
+SELECT SUM(`beds`) AS 'totale_letti'
+FROM `stanze`
